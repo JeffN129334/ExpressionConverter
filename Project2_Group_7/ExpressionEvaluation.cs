@@ -1,74 +1,80 @@
-﻿namespace Project2_Group_7
+﻿using System.Linq.Expressions;
+
+namespace Project2_Group_7
 {
     public class ExpressionEvaluation
     {
         public int EvaluatePrefixExpression(string prefixExpression)
         {
-            Stack<int> operands = new Stack<int>();
+            Stack<Expression> stack = new Stack<Expression>();
+            string[] tokens = prefixExpression.Split(' ');
 
-            for (int i = prefixExpression.Length - 1; i >= 0; i--)
+            for (int i = tokens.Length - 1; i >= 0; i--)
             {
-                char c = prefixExpression[i];
-                if (char.IsDigit(c))
+                string token = tokens[i];
+                if (IsOperator(token))
                 {
-                    operands.Push(c - '0');
+                    Expression right = stack.Pop();
+                    Expression left = stack.Pop();
+                    Expression combined = CombineExpressions(token, left, right);
+                    stack.Push(combined);
                 }
-                else if (IsOperator(c))
+                else
                 {
-                    int op1 = operands.Pop();
-                    int op2 = operands.Pop();
-                    int result = PerformOperation(c, op1, op2);
-                    operands.Push(result);
+                    stack.Push(Expression.Constant(int.Parse(token)));
                 }
             }
 
-            return operands.Pop();
+            var lambda = Expression.Lambda<Func<int>>(stack.Pop());
+            var compiled = lambda.Compile();
+            return compiled();
         }
 
         public int EvaluatePostfixExpression(string postfixExpression)
         {
-            Stack<int> operands = new Stack<int>();
+            Stack<Expression> stack = new Stack<Expression>();
+            string[] tokens = postfixExpression.Split(' ');
 
-            foreach (char c in postfixExpression)
+            foreach (string token in tokens)
             {
-                if (char.IsDigit(c))
+                if (IsOperator(token))
                 {
-                    operands.Push(c - '0');
+                    Expression right = stack.Pop();
+                    Expression left = stack.Pop();
+                    Expression combined = CombineExpressions(token, left, right);
+                    stack.Push(combined);
                 }
-                else if (IsOperator(c))
+                else
                 {
-                    int op2 = operands.Pop();
-                    int op1 = operands.Pop();
-                    int result = PerformOperation(c, op1, op2);
-                    operands.Push(result);
+                    stack.Push(Expression.Constant(int.Parse(token)));
                 }
             }
 
-            return operands.Pop();
+            var lambda = Expression.Lambda<Func<int>>(stack.Pop());
+            var compiled = lambda.Compile();
+            return compiled();
         }
 
-        private int PerformOperation(char op, int operand1, int operand2)
+        private Expression CombineExpressions(string op, Expression left, Expression right)
         {
             switch (op)
             {
-                case '+':
-                    return operand1 + operand2;
-                case '-':
-                    return operand1 - operand2;
-                case '*':
-                    return operand1 * operand2;
-                case '/':
-                    if (operand2 == 0)
-                        throw new DivideByZeroException();
-                    return operand1 / operand2;
+                case "+":
+                    return Expression.Add(left, right);
+                case "-":
+                    return Expression.Subtract(left, right);
+                case "*":
+                    return Expression.Multiply(left, right);
+                case "/":
+                    return Expression.Divide(left, right);
                 default:
                     throw new ArgumentException("Invalid operator: " + op);
             }
         }
 
-        private bool IsOperator(char c)
+        private bool IsOperator(string token)
         {
-            return c == '+' || c == '-' || c == '*' || c == '/';
+            return token == "+" || token == "-" || token == "*" || token == "/";
         }
     }
 }
