@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Project2_Group_7
+﻿namespace Project2_Group_7
 {
     public class PostfixConverter
     {
@@ -8,13 +6,13 @@ namespace Project2_Group_7
         public string ConvertToPostfix(string infixExpression)
         {
             Stack<char> operators = new Stack<char>();
-            StringBuilder postfix = new StringBuilder();
+            Queue<char> output = new Queue<char>();
 
             foreach (char c in infixExpression)
             {
                 if (char.IsLetterOrDigit(c))
                 {
-                    postfix.Append(c);
+                    output.Enqueue(c);
                 }
                 else if (c == '(')
                 {
@@ -24,7 +22,7 @@ namespace Project2_Group_7
                 {
                     while (operators.Count > 0 && operators.Peek() != '(' && Precedence(c) <= Precedence(operators.Peek()))
                     {
-                        postfix.Append(operators.Pop());
+                        output.Enqueue(operators.Pop());
                     }
                     operators.Push(c);
                 }
@@ -32,7 +30,7 @@ namespace Project2_Group_7
                 {
                     while (operators.Peek() != '(')
                     {
-                        postfix.Append(operators.Pop());
+                        output.Enqueue(operators.Pop());
                     }
                     operators.Pop(); // Discard '('
                 }
@@ -40,10 +38,10 @@ namespace Project2_Group_7
 
             while (operators.Count > 0)
             {
-                postfix.Append(operators.Pop());
+                output.Enqueue(operators.Pop());
             }
 
-            return postfix.ToString();
+            return string.Join("", output);
         }
 
         // Helper method to determine precedence of operators
