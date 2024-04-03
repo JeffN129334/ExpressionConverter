@@ -4,14 +4,14 @@ namespace Project2_Group_7
 {
     public class ExpressionEvaluation
     {
+        // Evaluate prefix expression using expression trees
         public int EvaluatePrefixExpression(string prefixExpression)
         {
             Stack<Expression> stack = new Stack<Expression>();
             string[] tokens = prefixExpression.Split(' ');
 
-            for (int i = tokens.Length - 1; i >= 0; i--)
+            foreach (string token in tokens.Reverse())
             {
-                string token = tokens[i];
                 if (IsOperator(token))
                 {
                     Expression right = stack.Pop();
@@ -25,11 +25,12 @@ namespace Project2_Group_7
                 }
             }
 
-            var lambda = Expression.Lambda<Func<int>>(stack.Pop());
-            var compiled = lambda.Compile();
+            Expression<Func<int>> lambda = Expression.Lambda<Func<int>>(stack.Pop());
+            Func<int> compiled = lambda.Compile();
             return compiled();
         }
 
+        // Evaluate postfix expression using expression trees
         public int EvaluatePostfixExpression(string postfixExpression)
         {
             Stack<Expression> stack = new Stack<Expression>();
@@ -50,11 +51,12 @@ namespace Project2_Group_7
                 }
             }
 
-            var lambda = Expression.Lambda<Func<int>>(stack.Pop());
-            var compiled = lambda.Compile();
+            Expression<Func<int>> lambda = Expression.Lambda<Func<int>>(stack.Pop());
+            Func<int> compiled = lambda.Compile();
             return compiled();
         }
 
+        // Helper method to combine expressions using operators
         private Expression CombineExpressions(string op, Expression left, Expression right)
         {
             switch (op)
@@ -72,6 +74,7 @@ namespace Project2_Group_7
             }
         }
 
+        // Helper method to check if token is an operator
         private bool IsOperator(string token)
         {
             return token == "+" || token == "-" || token == "*" || token == "/";
