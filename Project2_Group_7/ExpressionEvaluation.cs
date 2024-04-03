@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Text;
 
 namespace Project2_Group_7
 {
@@ -8,7 +9,7 @@ namespace Project2_Group_7
         public int EvaluatePrefixExpression(string prefixExpression)
         {
             Stack<Expression> stack = new Stack<Expression>();
-            string[] tokens = prefixExpression.Split(' ');
+            string[] tokens = GetTokens(prefixExpression);
 
             foreach (string token in tokens.Reverse())
             {
@@ -34,7 +35,7 @@ namespace Project2_Group_7
         public int EvaluatePostfixExpression(string postfixExpression)
         {
             Stack<Expression> stack = new Stack<Expression>();
-            string[] tokens = postfixExpression.Split(' ');
+            string[] tokens = GetTokens(postfixExpression);
 
             foreach (string token in tokens)
             {
@@ -56,7 +57,38 @@ namespace Project2_Group_7
             return compiled();
         }
 
-        // Helper method to combine expressions using operators
+        // Method to extract tokens from the expression
+        private string[] GetTokens(string expression)
+        {
+            List<string> tokens = new List<string>();
+            StringBuilder token = new StringBuilder();
+
+            foreach (char c in expression)
+            {
+                if (IsOperator(token.ToString()) || c == '(' || c == ')')
+                {
+                    if (token.Length > 0)
+                    {
+                        tokens.Add(token.ToString());
+                        token.Clear();
+                    }
+                    tokens.Add(c.ToString());
+                }
+                else if (char.IsDigit(c))
+                {
+                    token.Append(c);
+                }
+            }
+
+            if (token.Length > 0)
+            {
+                tokens.Add(token.ToString());
+            }
+
+            return tokens.ToArray();
+        }
+
+        // Combine expressions based on operators
         private Expression CombineExpressions(string op, Expression left, Expression right)
         {
             switch (op)
@@ -74,10 +106,10 @@ namespace Project2_Group_7
             }
         }
 
-        // Helper method to check if token is an operator
-        private bool IsOperator(string token)
+        // Check if the string is an operator
+        private bool IsOperator(string str)
         {
-            return token == "+" || token == "-" || token == "*" || token == "/";
+            return str == "+" || str == "-" || str == "*" || str == "/";
         }
     }
 }
