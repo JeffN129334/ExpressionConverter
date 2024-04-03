@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project2_Group_7
+﻿namespace Project2_Group_7
 {
     public static class CSVFile
     {
@@ -22,7 +15,7 @@ namespace Project2_Group_7
             string[] fields;
 
             //For each row (minus the first one which contains the headers)
-            for (int i = 1; i < rows.Length - 1; i++)
+            for (int i = 1; i < rows.Length; i++)
             {
                 //Split the rows into fields
                 fields = rows[i].Split(',');
@@ -36,6 +29,7 @@ namespace Project2_Group_7
             {
                 throw new Exception("No data found");
             }
+
             return expressionList;
         }
     }
