@@ -20,6 +20,12 @@
                 //Split the rows into fields
                 fields = rows[i].Split(',');
 
+                // Trim each field to remove leading/trailing whitespace including '\r' characters
+                for (int j = 0; j < fields.Length; j++)
+                {
+                    fields[j] = fields[j].Trim();
+                }
+
                 //Create a new CityInfo object
                 expressionList.Add(fields[1]);
             }
