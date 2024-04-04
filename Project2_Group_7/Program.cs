@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Xml;
 
 namespace Project2_Group_7
@@ -11,7 +12,7 @@ namespace Project2_Group_7
         static void Main(string[] args)
         {
             // Read infix expressions from CSV file
-            List<string> infixExpressions = CSVFile.ParseCSV(inputFile);
+            List<ExpressionData> infixExpressions = CSVFile.ParseCSV(inputFile);
 
             // Process expressions
             ProcessExpressions(infixExpressions);
@@ -26,7 +27,7 @@ namespace Project2_Group_7
             Console.ReadKey();
         }
 
-        static void ProcessExpressions(List<string> expressions)
+        static void ProcessExpressions(List<ExpressionData> expressions)
         {
             PrefixConverter prefixConverter = new PrefixConverter();
             PostfixConverter postfixConverter = new PostfixConverter();
@@ -34,11 +35,11 @@ namespace Project2_Group_7
 
             Console.WriteLine("Summary Report:");
 
-            foreach (var infix in expressions)
+            foreach (ExpressionData expr in expressions)
             {
                 // Convert to prefix and postfix notations
-                string prefix = prefixConverter.ConvertToPrefix(infix);
-                string postfix = postfixConverter.ConvertToPostfix(infix);
+                string prefix = prefixConverter.ConvertToPrefix(expr.Infix);
+                string postfix = postfixConverter.ConvertToPostfix(expr.Infix);
 
                 // Evaluate expressions
                 int prefixResult = expressionEvaluation.EvaluatePrefixExpression(prefix);
@@ -48,11 +49,12 @@ namespace Project2_Group_7
                 CompareExpressions comparer = new CompareExpressions();
                 int comparisonResult = comparer.Compare(prefixResult, postfixResult);
 
-                Console.WriteLine($"Infix: {infix}, Prefix: {prefix}, Postfix: {postfix}, Prefix Result: {prefixResult}, Postfix Result: {postfixResult}, Match: {(comparisonResult == 0 ? "True" : "False")}");
+                expr.Update(prefix, postfix, prefixResult, postfixResult, comparisonResult == 0);
+                Console.WriteLine(expr.ToString());
             }
         }
 
-        static void GenerateSummaryReport(List<string> expressions)
+        static void GenerateSummaryReport(List<ExpressionData> expressions)
         {
             Console.WriteLine("\nSummary Report:");
 
@@ -65,28 +67,22 @@ namespace Project2_Group_7
                 // Write conversion outputs to XML
                 writer.WriteStartElement("Conversions");
 
-                foreach (var infix in expressions)
+                foreach (var expr in expressions)
                 {
                     writer.WriteStartElement("Expression");
-                    writer.WriteElementString("Infix", infix);
-
-                    PrefixConverter prefixConverter = new PrefixConverter();
-                    string prefix = prefixConverter.ConvertToPrefix(infix);
-                    writer.WriteElementString("Prefix", prefix);
-
-                    PostfixConverter postfixConverter = new PostfixConverter();
-                    string postfix = postfixConverter.ConvertToPostfix(infix);
-                    writer.WriteElementString("Postfix", postfix);
-
-                    ExpressionEvaluation expressionEvaluation = new ExpressionEvaluation();
-                    int prefixResult = expressionEvaluation.EvaluatePrefixExpression(prefix);
-                    int postfixResult = expressionEvaluation.EvaluatePostfixExpression(postfix);
-                    writer.WriteElementString("Evaluation", prefixResult.ToString());
-
-                    CompareExpressions comparer = new CompareExpressions();
-                    int comparisonResult = comparer.Compare(prefixResult, postfixResult);
-                    writer.WriteElementString("Comparison",  (comparisonResult == 0 ? "True" : "False"));
-
+                    writer.WriteElementString("Sno", expr.Sno);
+                    writer.WriteElementString("Infix", expr.Infix);
+                    writer.WriteElementString("Prefix", expr.Prefix);
+                    writer.WriteElementString("Postfix", expr.Postfix);
+                    if (expr.Match)
+                    {
+                        writer.WriteElementString("Evaluation", expr.PostfixResult.ToString());
+                    }
+                    else
+                    {
+                        writer.WriteElementString("Evaluation", "Indeterminate");
+                    }
+                    writer.WriteElementString("Comparison", expr.Match.ToString());
                     writer.WriteEndElement();
                 }
 

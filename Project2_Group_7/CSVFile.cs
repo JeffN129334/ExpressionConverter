@@ -2,10 +2,10 @@
 {
     public static class CSVFile
     {
-        public static List<string> ParseCSV(string fileName)
+        public static List<ExpressionData> ParseCSV(string fileName)
         {
             //String list to store expressions
-            List<string> expressionList = new List<string>();
+            List<ExpressionData> expressionList = new List<ExpressionData>();
 
             //Read all the text from the file
             string csvContent = File.ReadAllText(fileName);
@@ -26,8 +26,8 @@
                     fields[j] = fields[j].Trim();
                 }
 
-                //Create a new CityInfo object
-                expressionList.Add(fields[1]);
+                //Create a new expression object
+                expressionList.Add(new ExpressionData(fields[0], fields[1]));
             }
 
             //If the list is empty throw an exception
