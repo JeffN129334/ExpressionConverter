@@ -12,8 +12,8 @@ namespace Project2_Group_7
         public string Infix { get; set; }
         public string Prefix { get; set; }
         public string Postfix { get; set; }
-        public int PrefixResult { get; set; }
-        public int PostfixResult { get; set; }
+        public double PrefixResult { get; set; }
+        public double PostfixResult { get; set; }
         public bool Match { get; set; }
 
         public ExpressionData(string sno, string infix)
@@ -26,7 +26,7 @@ namespace Project2_Group_7
             PostfixResult = 0;
             Match = false;
         }
-        public void Update(string prefix, string postfix, int prefixResult, int postfixResult, bool match)
+        public void Update(string prefix, string postfix, double prefixResult, double postfixResult, bool match)
         {
             Prefix = prefix;
             Postfix = postfix;

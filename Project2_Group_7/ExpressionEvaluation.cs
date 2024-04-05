@@ -5,42 +5,54 @@ namespace Project2_Group_7
 {
     public class ExpressionEvaluation
     {
-        // Evaluate prefix expression using expression trees
-        public int EvaluatePrefixExpression(string prefixExpression)
+        /*
+        * Method Name: EvaluatePrefixExpression
+        * Purpose: Evaluate a prefix expression using expression trees
+        * Accepts: A string containing a single expression in prefix form
+        * Returns: A double containing the result of the evaluation
+        */
+        public double EvaluatePrefixExpression(string prefixExpression)
         {
             Stack<Expression> stack = new Stack<Expression>();
-            string[] tokens = GetTokens(prefixExpression);
+            string[] tokens = prefixExpression.Select(c => c.ToString()).ToArray();
 
             foreach (string token in tokens.Reverse())
             {
                 if (IsOperator(token))
                 {
-                    Expression right = stack.Pop();
+                    //Left operator will be on the top
                     Expression left = stack.Pop();
+                    Expression right = stack.Pop();
                     Expression combined = CombineExpressions(token, left, right);
                     stack.Push(combined);
                 }
                 else
                 {
-                    stack.Push(Expression.Constant(int.Parse(token)));
+                    stack.Push(Expression.Constant(double.Parse(token)));
                 }
             }
 
-            Expression<Func<int>> lambda = Expression.Lambda<Func<int>>(stack.Pop());
-            Func<int> compiled = lambda.Compile();
+            Expression<Func<double>> lambda = Expression.Lambda<Func<double>>(stack.Pop());
+            Func<double> compiled = lambda.Compile();
             return compiled();
         }
 
-        // Evaluate postfix expression using expression trees
-        public int EvaluatePostfixExpression(string postfixExpression)
+        /*
+        * Method Name: EvaluatePostfixExpression
+        * Purpose: Evaluate a postfix expression using expression trees
+        * Accepts: A string containing a single expression in postfix form
+        * Returns: A double containing the result of the evaluation
+        */
+        public double EvaluatePostfixExpression(string postfixExpression)
         {
             Stack<Expression> stack = new Stack<Expression>();
-            string[] tokens = GetTokens(postfixExpression);
+            string[] tokens = postfixExpression.Select(c => c.ToString()).ToArray();
 
             foreach (string token in tokens)
             {
                 if (IsOperator(token))
                 {
+                    //Right operator will be on the top
                     Expression right = stack.Pop();
                     Expression left = stack.Pop();
                     Expression combined = CombineExpressions(token, left, right);
@@ -48,16 +60,16 @@ namespace Project2_Group_7
                 }
                 else
                 {
-                    stack.Push(Expression.Constant(int.Parse(token)));
+                    stack.Push(Expression.Constant(double.Parse(token)));
                 }
             }
 
-            Expression<Func<int>> lambda = Expression.Lambda<Func<int>>(stack.Pop());
-            Func<int> compiled = lambda.Compile();
+            Expression<Func<double>> lambda = Expression.Lambda<Func<double>>(stack.Pop());
+            Func<double> compiled = lambda.Compile();
             return compiled();
         }
 
-        // Method to extract tokens from the expression
+        // Old Tokenizer - Delete before submission
         private string[] GetTokens(string expression)
         {
             List<string> tokens = new List<string>();
@@ -84,11 +96,15 @@ namespace Project2_Group_7
             {
                 tokens.Add(token.ToString());
             }
-
             return tokens.ToArray();
         }
 
-        // Combine expressions based on operators
+        /*
+        * Method Name: CombineExpressions
+        * Purpose: Evaluate the operands based on the operator
+        * Accepts: An operator string, and an Expression object for each operator
+        * Returns: An expression object containing the result
+        */
         private Expression CombineExpressions(string op, Expression left, Expression right)
         {
             switch (op)
@@ -106,7 +122,12 @@ namespace Project2_Group_7
             }
         }
 
-        // Check if the string is an operator
+        /*
+        * Method Name: IsOperator
+        * Purpose: Helper method to check if a string is representing a valid operator
+        * Accepts: String
+        * Returns: Bool
+        */
         private bool IsOperator(string str)
         {
             return str == "+" || str == "-" || str == "*" || str == "/";

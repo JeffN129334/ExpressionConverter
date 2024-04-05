@@ -11,13 +11,13 @@ namespace Project2_Group_7
                 throw new ArgumentNullException("Both objects must be non-null.");
             }
 
-            if (!(x is int) || !(y is int))
+            if (!(x is double) || !(y is double))
             {
-                throw new ArgumentException("Both objects must be of type int.");
+                throw new ArgumentException("Both objects must be of type double.");
             }
 
-            int resultX = (int)x;
-            int resultY = (int)y;
+            double resultX = (double)x;
+            double resultY = (double)y;
 
             // Compare the results of prefix and postfix evaluation
             if (resultX == resultY)
