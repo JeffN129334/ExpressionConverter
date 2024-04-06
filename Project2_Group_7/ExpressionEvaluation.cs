@@ -3,6 +3,12 @@ using System.Text;
 
 namespace Project2_Group_7
 {
+    /*
+     * Class Name:		ExpressionEvaluation
+     * Purpose:			A class for computing the results of an expression in various formats
+     * Coder:			    Gui Miranda, Jeff Nesbitt, Andrew Mattice
+     * Date:			    2024-04-05
+    */
     public class ExpressionEvaluation
     {
         /*
@@ -67,36 +73,6 @@ namespace Project2_Group_7
             Expression<Func<double>> lambda = Expression.Lambda<Func<double>>(stack.Pop());
             Func<double> compiled = lambda.Compile();
             return compiled();
-        }
-
-        // Old Tokenizer - Delete before submission
-        private string[] GetTokens(string expression)
-        {
-            List<string> tokens = new List<string>();
-            StringBuilder token = new StringBuilder();
-
-            foreach (char c in expression)
-            {
-                if (IsOperator(token.ToString()) || c == '(' || c == ')')
-                {
-                    if (token.Length > 0)
-                    {
-                        tokens.Add(token.ToString());
-                        token.Clear();
-                    }
-                    tokens.Add(c.ToString());
-                }
-                else if (char.IsDigit(c))
-                {
-                    token.Append(c);
-                }
-            }
-
-            if (token.Length > 0)
-            {
-                tokens.Add(token.ToString());
-            }
-            return tokens.ToArray();
         }
 
         /*

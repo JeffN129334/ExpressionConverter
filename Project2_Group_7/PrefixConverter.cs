@@ -2,9 +2,20 @@
 
 namespace Project2_Group_7
 {
+    /*
+     * Class Name:		PrefixConverter
+     * Purpose:			A class capable of converting infix expressions to prefix notation
+     * Coder:			    Gui Miranda, Jeff Nesbitt, Andrew Mattice
+     * Date:			    2024-04-05
+    */
     public class PrefixConverter
     {
-        // Convert infix expression to prefix notation
+        /*
+        * Method Name: ConvertToPrefix
+        * Purpose: Convert infix expression to prefix notation
+        * Accepts: Expression in infix notation as string
+        * Returns: Expression in prefix notation as string
+        */
         public string ConvertToPrefix(string infixExpression)
         {
             Stack<char> operators = new Stack<char>();
@@ -46,7 +57,12 @@ namespace Project2_Group_7
             return prefix.ToString();
         }
 
-        // Helper method to determine precedence of operators
+        /*
+        * Method Name: Precedence
+        * Purpose: Helper method to determine precedence of operators
+        * Accepts: Operator as char
+        * Returns: The priority of the operator as int
+        */
         private int Precedence(char op)
         {
             if (op == '*' || op == '/')
@@ -57,7 +73,12 @@ namespace Project2_Group_7
                 return 0; // Parentheses
         }
 
-        // Helper method to check if character is an operator
+        /*
+        * Method Name: IsOperator
+        * Purpose: Helper method to check if character is an operator
+        * Accepts: Operator as char
+        * Returns: Bool
+        */
         private bool IsOperator(char c)
         {
             return c == '+' || c == '-' || c == '*' || c == '/';

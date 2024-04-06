@@ -1,8 +1,19 @@
 ﻿namespace Project2_Group_7
 {
+    /*
+     * Class Name:		PostfixConverter
+     * Purpose:			A class capable of converting infix expressions to postfix notation
+     * Coder:			    Gui Miranda, Jeff Nesbitt, Andrew Mattice
+     * Date:			    2024-04-05
+    */
     public class PostfixConverter
     {
-        // Convert infix expression to postfix notation
+        /*
+        * Method Name: ConvertToPostfix
+        * Purpose: Convert infix expression to postfix notation
+        * Accepts: Expression in infix notation as string
+        * Returns: Expression in postfix notation as string
+        */
         public string ConvertToPostfix(string infixExpression)
         {
             Stack<char> operators = new Stack<char>();
@@ -44,7 +55,12 @@
             return string.Join("", output);
         }
 
-        // Helper method to determine precedence of operators
+        /*
+        * Method Name: Precedence
+        * Purpose: Helper method to determine precedence of operators
+        * Accepts: Operator as char
+        * Returns: The priority of the operator as int
+        */
         private int Precedence(char op)
         {
             if (op == '*' || op == '/')
@@ -55,7 +71,12 @@
                 return 0; // Parentheses
         }
 
-        // Helper method to check if character is an operator
+        /*
+        * Method Name: IsOperator
+        * Purpose: Helper method to check if character is an operator
+        * Accepts: Operator as char
+        * Returns: Bool
+        */
         private bool IsOperator(char c)
         {
             return c == '+' || c == '-' || c == '*' || c == '/';

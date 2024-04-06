@@ -2,8 +2,20 @@
 
 namespace Project2_Group_7
 {
+    /*
+     * Class Name:		CompareExpressions
+     * Purpose:			A class containing a method for comparing expression results
+     * Coder:			    Gui Miranda, Jeff Nesbitt, Andrew Mattice
+     * Date:			    2024-04-05
+    */
     public class CompareExpressions : IComparer
     {
+        /*
+        * Method Name: Compare
+        * Purpose: Compare the results of two doubles
+        * Accepts: Two objects (which should be doubles)
+        * Returns: Int representation of comparison results
+        */
         public int Compare(object? x, object? y)
         {
             if (x == null || y == null)

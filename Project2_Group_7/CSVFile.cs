@@ -1,7 +1,19 @@
 ﻿namespace Project2_Group_7
 {
+    /*
+     * Class Name:		CSVFile
+     * Purpose:			A class containing a method for parsing a CSV file to a format that can be used by the program
+     * Coder:			    Gui Miranda, Jeff Nesbitt, Andrew Mattice
+     * Date:			    2024-04-05
+    */
     public static class CSVFile
     {
+        /*
+        * Method Name: ParseCSV
+        * Purpose: Parse the input file to a list of ExpressionData objects
+        * Accepts: CSV file name as string
+        * Returns: List of ExpressionData objects
+        */
         public static List<ExpressionData> ParseCSV(string fileName)
         {
             //String list to store expressions

@@ -1,14 +1,24 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace Project2_Group_7
 {
+    /*
+     * Class Name:		Program
+     * Purpose:			Convert Infix notation expression into postfix and prefix notation and evaluate them using Expression Trees.
+     * Coder:			    Gui Miranda, Jeff Nesbitt, Andrew Mattice
+     * Date:			    2024-04-05
+    */
     class Program
     {
         static string inputFile = "../../../Data/Project 2_INFO_5101.csv";
         static string outputFile = "../../../Data/Output.xml";
+        static string divider = "".PadLeft(100, '=');
     
+        //Main entry point for the program
         static void Main(string[] args)
         {
             // Read infix expressions from CSV file
@@ -20,11 +30,13 @@ namespace Project2_Group_7
             // Generate and display summary report
             GenerateSummaryReport(infixExpressions);
 
-            // Prompt?? user to upload XML file -> not sure what it means to prompt the user for the file since the file is already here
-            OpenXMLFile();
-
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+            //Prompt user to view xml file
+            Console.WriteLine("Press x to view report in XML, or any other key to exit.");
+            char input = Console.ReadKey().KeyChar;
+            if(input == 'x')
+            {
+                OpenXMLFile();
+            }
         }
 
         /*
@@ -66,10 +78,14 @@ namespace Project2_Group_7
         */
         static void GenerateSummaryReport(List<ExpressionData> expressions)
         {
-            //Header for console
-            Console.WriteLine("\nSummary Report:");
+            //Writer header for console
+            Console.WriteLine(divider);
+            Console.WriteLine(string.Format("*{0,49} {1,-48}*", "Summary", "Report"));
+            Console.WriteLine(divider + "\n");
+            Console.WriteLine(string.Format("|{0,5}|{1,20}|{2,20}|{3,20}|{4,10}|{5,10}|{6,7}|", "Sno", "Infix", "Prefix", "Postfix", "PrefixRes", "PostfixRes", "Match"));
+            Console.WriteLine(divider);
 
-            // Save summary report to XML file
+            //Write report to XML file
             using (XmlWriter writer = XmlWriter.Create(outputFile))
             {
                 writer.WriteStartDocument();                       //Start Document
@@ -98,7 +114,8 @@ namespace Project2_Group_7
                 writer.WriteEndElement();                           //End Summary
                 writer.WriteEndDocument();                        //End Document
             }
-
+            //Write footer for console
+            Console.WriteLine(divider);
             Console.WriteLine("Summary report has been saved to Output.xml");
         }
 
@@ -110,6 +127,7 @@ namespace Project2_Group_7
         */
         static void OpenXMLFile()
         {
+            Console.WriteLine("Opening in XML...");
             try
             {
                 ProcessStartInfo info = new ProcessStartInfo
